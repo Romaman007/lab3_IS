@@ -6,7 +6,6 @@ INPUT_DIM = 3
 OUT_DIM = 3
 H_DIM = 9
 ALPHA = 0.1
-NUM_EPOCHS = 100
 #BATCH_SIZE = 3
 
 def relu(t):
@@ -59,7 +58,6 @@ class NeuralNetwork:
         y_full = np.zeros((1, OUT_DIM))
         y_full[0, y] = 1
         df = z - y_full
-
         t1=x @ self.W1 + self.b1
         self.W1-=ALPHA*x.T@(df@self.W2.T*relu_deriv(t1))
         self.b1-=ALPHA*df@self.W2.T*relu_deriv(t1)
@@ -76,9 +74,10 @@ for i in range(len(y)):
     dataset.append((X[i],y[i]))
 
 loss_arr = []
-
+loss=1
 NN=NeuralNetwork()
-for ep in range(NUM_EPOCHS):
+# for ep in range(NUM_EPOCHS):
+while (loss/len(dataset)>0.01):
     loss=0
     random.shuffle(dataset)
     for i in range(len(dataset)):
@@ -88,6 +87,7 @@ for ep in range(NUM_EPOCHS):
     loss_arr.append(loss/len(dataset))
 plt.plot(loss_arr)
 plt.show()
+
 def acc():
     z=0
     print("Table check")
@@ -99,6 +99,7 @@ def acc():
         if(y1==y):
             z+=1
     print("Accuracy:",z/len(dataset))
+dataset.append(([[1,0,0]], 0))
 acc()
 a=[]
 print("Get example")
